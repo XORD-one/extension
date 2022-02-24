@@ -12,7 +12,7 @@ import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defau
 import { TypeRegistry } from '@polkadot/types';
 import keyring from '@polkadot/ui-keyring';
 import { accounts as accountsObservable } from '@polkadot/ui-keyring/observable/accounts';
-import { assert, isHex } from '@polkadot/util';
+import { assert, isHex, u8aToHex } from '@polkadot/util';
 import { keyExtractSuri, mnemonicGenerate, mnemonicValidate } from '@polkadot/util-crypto';
 
 import { withErrorLog } from './helpers';
@@ -166,8 +166,8 @@ export default class Extension {
     }
   }
 
-  //change made here
-  //account sign handler added to sign the transaction
+  // change made here
+  // account sign handler added to sign the transaction
   private accountsSign({ address, password, transaction }: RequestAccountSign): ResponseAccountsSign {
     const pair = keyring.getPair(address);
 
@@ -576,7 +576,7 @@ export default class Extension {
       case 'pri(accounts.validate)':
         return this.accountsValidate(request as RequestAccountValidate);
 
-      //change made here
+      // change made here
       // case added to sign the transaction
       case 'pri(accounts.sign)':
         return this.accountsSign(request as RequestAccountSign);
