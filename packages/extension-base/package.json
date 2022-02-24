@@ -1,23 +1,23 @@
 {
-  "author": "Jaco Greeff <jacogr@gmail.com>",
-  "bugs": "https://github.com/polkadot-js/extension/issues",
+  "author": "Ahsan Ahmed<ahsan.ahmed@xord.com>",
+  "bugs": "https://github.com/XORD-one/metadot-extension-base/issues",
   "contributors": [],
-  "description": "Functions, classes and other utilities used in @polkadot/extension",
-  "homepage": "https://github.com/polkadot-js/extension/tree/master/packages/extension-base#readme",
+  "description": "This repo is froked from polkadot/extension. We have added few extra functions in the code in order to make it compatible for metadot",
+  "homepage": "https://github.com/XORD-one/metadot-extension-base/tree/master/packages/extension-base#readme",
   "license": "Apache-2.0",
   "maintainers": [],
-  "name": "@polkadot/extension-base",
+  "name": "metadot-extension-base",
   "repository": {
     "directory": "packages/extension-base",
     "type": "git",
-    "url": "https://github.com/polkadot-js/extension.git"
+    "url": "https://github.com/XORD-one/metadot-extension-base.git"
   },
   "sideEffects": [
     "./detectPackage.js",
     "./detectPackage.cjs"
   ],
   "type": "module",
-  "version": "0.42.8-9",
+  "version": "0.0.1",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.17.2",
