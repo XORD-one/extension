@@ -1,5 +1,5 @@
-Why we forked this repo:
-We have added account sign function in background handler of extension-base to sign transactions using keypair
+## Why we forked this repo:
+We have added account sign function in background handler of extension-base to sign transactions using keypair to make it compatible with Metadot wallet.
 
 
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
