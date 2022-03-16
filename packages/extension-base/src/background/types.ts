@@ -224,14 +224,13 @@ export interface RequestAccountValidate {
   password: string;
 }
 
-
-
-//change made here
-//interface added for response account sign
+// change made here
+// interface added for response account sign
 export interface RequestAccountSign {
   address: string;
   password: string;
   transaction: object;
+  type: string
 }
 
 export interface RequestDeriveCreate {
@@ -373,8 +372,8 @@ export interface ResponseAccountsExport {
   exportedJson: KeyringPairs$Json;
 }
 
-//change made here
-//interface added for response account sign
+// change made here
+// interface added for response account sign
 export interface ResponseAccountsSign {
   signature: string
 }

@@ -168,14 +168,23 @@ export default class Extension {
 
   // change made here
   // account sign handler added to sign the transaction
-  private accountsSign({ address, password, transaction }: RequestAccountSign): ResponseAccountsSign {
+  private accountsSign({ address, password, transaction, type }: RequestAccountSign): ResponseAccountsSign {
     const pair = keyring.getPair(address);
 
     pair.unlock(password);
 
     const transactionU8a = Uint8Array.from(Object.values(transaction));
 
-    const signature = pair.sign(transactionU8a, { withType: true });
+    let signature;
+
+    if (type === 'ethereum') {
+      signature = pair.sign(transactionU8a);
+    }
+    else {
+      signature = pair.sign(transactionU8a, { withType: true });
+
+    }
+
     const sigHex = u8aToHex(signature);
 
     return {
