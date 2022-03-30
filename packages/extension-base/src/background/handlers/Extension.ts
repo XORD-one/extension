@@ -6,7 +6,7 @@ import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
 import type { SubjectInfo } from '@polkadot/ui-keyring/observable/types';
 import type { KeypairType } from '@polkadot/util-crypto/types';
-import type { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MetadataRequest, RequestAccountBatchExport, RequestAccountChangePassword, RequestAccountCreateExternal, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountShow, RequestAccountSign, RequestAccountTie, RequestAccountValidate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, ResponseAccountExport, ResponseAccountsExport, ResponseAccountsSign, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked, ResponseType, SigningRequest } from '../types';
+import type { AccountJson, AllowedPath, AuthorizeRequest, MessageTypes, MetadataRequest, RequestAccountBatchExport, RequestAccountChangePassword, RequestAccountCreateExternal, RequestAccountCreateHardware, RequestAccountCreateSuri, RequestAccountEdit, RequestAccountExport, RequestAccountForget, RequestAccountIsLocked, RequestAccountShow, RequestAccountSign, RequestAccountTie, RequestAccountValidate, RequestAuthorizeApprove, RequestAuthorizeReject, RequestBatchRestore, RequestDeriveCreate, RequestDeriveValidate, RequestJsonRestore, RequestMetadataApprove, RequestMetadataReject, RequestSeedCreate, RequestSeedValidate, RequestSigningApprovePassword, RequestSigningApproveSignature, RequestSigningCancel, RequestSigningIsLocked, RequestTypes, ResponseAccountExport, ResponseAccountsExport, ResponseAccountsIsLocked, ResponseAccountsSign, ResponseAuthorizeList, ResponseDeriveValidate, ResponseJsonGetAccountInfo, ResponseSeedCreate, ResponseSeedValidate, ResponseSigningIsLocked, ResponseType, SigningRequest } from '../types';
 
 import { ALLOWED_PATH, PASSWORD_EXPIRY_MS } from '@polkadot/extension-base/defaults';
 import { TypeRegistry } from '@polkadot/types';
@@ -167,11 +167,30 @@ export default class Extension {
   }
 
   // change made here
-  // account sign handler added to sign the transaction
-  private accountsSign({ address, password, transaction, type }: RequestAccountSign): ResponseAccountsSign {
+  // account is Locked handler added to fetch the lock status of the account
+  private accountsIsLocked({ address }: RequestAccountIsLocked): ResponseAccountsIsLocked {
     const pair = keyring.getPair(address);
 
-    pair.unlock(password);
+    assert(pair, 'Unable to find pair');
+
+    const remainingTime = this.refreshAccountPasswordCache(pair);
+
+    return {
+      isLocked: pair.isLocked,
+      remainingTime
+    };
+  }
+
+  // change made here
+  // account sign handler added to sign the transaction
+  private accountsSign({ address, password, savePass, transaction, type }: RequestAccountSign): ResponseAccountsSign {
+    const pair = keyring.getPair(address);
+
+    this.refreshAccountPasswordCache(pair);
+
+    if (pair.isLocked) {
+      pair.decodePkcs8(password);
+    }
 
     const transactionU8a = Uint8Array.from(Object.values(transaction));
 
@@ -179,10 +198,14 @@ export default class Extension {
 
     if (type === 'ethereum') {
       signature = pair.sign(transactionU8a);
-    }
-    else {
+    } else {
       signature = pair.sign(transactionU8a, { withType: true });
+    }
 
+    if (savePass) {
+      this.#cachedUnlocks[address] = Date.now() + PASSWORD_EXPIRY_MS;
+    } else {
+      pair.lock();
     }
 
     const sigHex = u8aToHex(signature);
@@ -584,6 +607,11 @@ export default class Extension {
 
       case 'pri(accounts.validate)':
         return this.accountsValidate(request as RequestAccountValidate);
+
+      // change made here
+      // case added to get Account lock status
+      case 'pri(accounts.isLocked)':
+        return this.accountsIsLocked(request as RequestAccountIsLocked);
 
       // change made here
       // case added to sign the transaction

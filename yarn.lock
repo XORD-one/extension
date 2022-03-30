@@ -2511,15 +2511,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/extension-base@npm:^0.42.8-9":
-  version: 0.42.8-9
-  resolution: "@polkadot/extension-base@npm:0.42.8-9"
+"@polkadot/extension-base@^0.42.8-9, @polkadot/extension-base@workspace:packages/extension-base":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/extension-base@workspace:packages/extension-base"
   dependencies:
     "@babel/runtime": ^7.17.2
     "@polkadot/api": ^7.8.1
     "@polkadot/extension-chains": ^0.42.8-9
     "@polkadot/extension-dapp": ^0.42.8-9
     "@polkadot/extension-inject": ^0.42.8-9
+    "@polkadot/extension-mocks": ^0.42.8-9
     "@polkadot/keyring": ^8.4.1
     "@polkadot/networks": ^8.4.1
     "@polkadot/phishing": ^0.8.176
@@ -2531,9 +2532,8 @@ __metadata:
     "@polkadot/util-crypto": ^8.4.1
     eventemitter3: ^4.0.7
     rxjs: ^7.5.4
-  checksum: 6fd4fa7f3b3bddef8aa317067b0ea44e7fcbd369309bc344203c0d61c59c02cda0d570ee9fec3e8cfce1bcdb9aba203f4f2ff940f8bc775d955be53b3b902166
-  languageName: node
-  linkType: hard
+  languageName: unknown
+  linkType: soft
 
 "@polkadot/extension-chains@^0.42.8-9, @polkadot/extension-chains@workspace:packages/extension-chains":
   version: 0.0.0-use.local
@@ -11828,30 +11828,6 @@ __metadata:
   checksum: 7268db63ed5169466540b6fb947aec313200bcf6d40c5ab722c22e242f651994619bcd85601602972d3c85bd2cc45a358a4c61937e9f11a061919a1da569b0c2
   languageName: node
   linkType: hard
-
-"metadot-extension-base@workspace:packages/extension-base":
-  version: 0.0.0-use.local
-  resolution: "metadot-extension-base@workspace:packages/extension-base"
-  dependencies:
-    "@babel/runtime": ^7.17.2
-    "@polkadot/api": ^7.8.1
-    "@polkadot/extension-chains": ^0.42.8-9
-    "@polkadot/extension-dapp": ^0.42.8-9
-    "@polkadot/extension-inject": ^0.42.8-9
-    "@polkadot/extension-mocks": ^0.42.8-9
-    "@polkadot/keyring": ^8.4.1
-    "@polkadot/networks": ^8.4.1
-    "@polkadot/phishing": ^0.8.176
-    "@polkadot/rpc-provider": ^7.8.1
-    "@polkadot/types": ^7.8.1
-    "@polkadot/ui-keyring": ^1.1.1
-    "@polkadot/ui-settings": ^1.1.1
-    "@polkadot/util": ^8.4.1
-    "@polkadot/util-crypto": ^8.4.1
-    eventemitter3: ^4.0.7
-    rxjs: ^7.5.4
-  languageName: unknown
-  linkType: soft
 
 "methods@npm:~1.1.2":
   version: 1.1.2

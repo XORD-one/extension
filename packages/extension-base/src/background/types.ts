@@ -86,6 +86,7 @@ export interface RequestSignatures {
   'pri(accounts.tie)': [RequestAccountTie, boolean];
   'pri(accounts.subscribe)': [RequestAccountSubscribe, boolean, AccountJson[]];
   'pri(accounts.validate)': [RequestAccountValidate, boolean];
+  'pri(accounts.isLocked)': [RequestAccountIsLocked, ResponseAccountsIsLocked]
   'pri(accounts.sign)': [RequestAccountSign, ResponseAccountsSign];
   'pri(accounts.changePassword)': [RequestAccountChangePassword, boolean];
   'pri(authorize.approve)': [RequestAuthorizeApprove, boolean];
@@ -224,13 +225,18 @@ export interface RequestAccountValidate {
   password: string;
 }
 
+export interface RequestAccountIsLocked {
+  address: string
+}
+
 // change made here
 // interface added for response account sign
 export interface RequestAccountSign {
   address: string;
-  password: string;
+  password?: string;
   transaction: object;
-  type: string
+  type: string;
+  savePass: boolean;
 }
 
 export interface RequestDeriveCreate {
@@ -370,6 +376,11 @@ export interface ResponseAccountExport {
 
 export interface ResponseAccountsExport {
   exportedJson: KeyringPairs$Json;
+}
+
+export interface ResponseAccountsIsLocked {
+  isLocked: boolean
+  remainingTime: number
 }
 
 // change made here
