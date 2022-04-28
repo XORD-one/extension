@@ -3,7 +3,7 @@
   "bugs": "https://github.com/XORD-one/metadot-extension-base/issues",
   "contributors": [],
   "description": "This repo is forked from polkadot/extension. We have added few extra functions in the code in order to make it compatible for metadot",
-  "homepage": "https://github.com/XORD-one/metadot-extension-base/tree/master/packages/extension-base#readme",
+  "homepage": "https://github.com/XORD-one/metadot-extension-base#readme",
   "license": "Apache-2.0",
   "maintainers": [],
   "name": "metadot-extension-base",
@@ -17,7 +17,7 @@
     "./detectPackage.cjs"
   ],
   "type": "module",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.17.2",

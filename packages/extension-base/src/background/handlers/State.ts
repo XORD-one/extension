@@ -1,6 +1,7 @@
 // Copyright 2019-2022 @polkadot/extension-bg authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable space-before-function-paren */
 import type { MetadataDef, ProviderMeta } from '@polkadot/extension-inject/types';
 import type { JsonRpcResponse, ProviderInterface, ProviderInterfaceCallback } from '@polkadot/rpc-provider/types';
 import type { AccountJson, AuthorizeRequest, MetadataRequest, RequestAuthorizeTab, RequestRpcSend, RequestRpcSubscribe, RequestRpcUnsubscribe, RequestSign, ResponseRpcListProviders, ResponseSigning, SigningRequest } from '../types';
@@ -60,7 +61,7 @@ interface SignRequest extends Resolver<ResponseSigning> {
   url: string;
 }
 
-const NOTIFICATION_URL = chrome.extension.getURL('notification.html');
+const NOTIFICATION_URL = chrome.runtime.getURL('notification.html');
 
 const POPUP_WINDOW_OPTS: chrome.windows.CreateData = {
   focused: true,
@@ -155,10 +156,14 @@ export default class State {
     extractMetadata(this.#metaStore);
 
     // retrieve previously set authorizations
-    const authString = localStorage.getItem(AUTH_URLS_KEY) || '{}';
-    const previousAuth = JSON.parse(authString) as AuthUrls;
+    const authString = async (v1: AuthUrls): Promise<void> => {
+      const abc = await chrome.storage.local.get(AUTH_URLS_KEY);
 
-    this.#authUrls = previousAuth;
+      v1 = abc;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    authString(this.#authUrls);
   }
 
   public get knownMetadata(): MetadataDef[] {
@@ -250,7 +255,9 @@ export default class State {
   };
 
   private saveCurrentAuthList() {
-    localStorage.setItem(AUTH_URLS_KEY, JSON.stringify(this.#authUrls));
+    chrome.storage.local.set({ AUTH_URLS_KEY: JSON.stringify(this.#authUrls) }, function () {
+      console.log('AUTH_URLS_KEY is set to inside package');
+    });
   }
 
   private metaComplete = (id: string, resolve: (result: boolean) => void, reject: (error: Error) => void): Resolver<boolean> => {
@@ -490,6 +497,12 @@ export default class State {
 
     return true;
   }
+
+  // public setAuthUrls(authUrls: AuthUrls): boolean {
+  //   this.#authUrls = authUrls;
+
+  //   return true;
+  // }
 
   public sign(url: string, request: RequestSign, account: AccountJson): Promise<ResponseSigning> {
     const id = getId();

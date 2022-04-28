@@ -1,6 +1,7 @@
 // Copyright 2019-2022 @polkadot/extension authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable space-before-function-paren */
 import type { MetadataDef } from '@polkadot/extension-inject/types';
 import type { KeyringPair, KeyringPair$Json, KeyringPair$Meta } from '@polkadot/keyring/types';
 import type { SignerPayloadJSON, SignerPayloadRaw } from '@polkadot/types/types';
@@ -192,14 +193,15 @@ export default class Extension {
       pair.decodePkcs8(password);
     }
 
-    const transactionU8a = Uint8Array.from(Object.values(transaction));
-
+    // const transactionU8a = Uint8Array.from(Object.values(transaction));
     let signature;
 
     if (type === 'ethereum') {
-      signature = pair.sign(transactionU8a);
+      signature = pair.sign(transaction);
     } else {
-      signature = pair.sign(transactionU8a, { withType: true });
+      signature = pair.sign(transaction, {
+        withType: true
+      });
     }
 
     if (savePass) {
@@ -498,7 +500,7 @@ export default class Extension {
   }
 
   private windowOpen(path: AllowedPath): boolean {
-    const url = `${chrome.extension.getURL('index.html')}#${path}`;
+    const url = `${chrome.runtime.getURL('index.html')}#${path}`;
 
     if (!ALLOWED_PATH.includes(path)) {
       console.error('Not allowed to open the url:', url);

@@ -234,7 +234,7 @@ export interface RequestAccountIsLocked {
 export interface RequestAccountSign {
   address: string;
   password?: string;
-  transaction: object;
+  transaction: string | Uint8Array;
   type: string;
   savePass: boolean;
 }
